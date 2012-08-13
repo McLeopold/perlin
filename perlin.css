@@ -1,0 +1,52 @@
+#up {
+  width: 200px;
+  height: 30px;
+}
+
+#down {
+  width: 200px;
+  height: 30px;
+}
+
+#left {
+  width: 30px;
+  height: 200px;
+}
+
+#right {
+  width: 30px;
+  height: 200px;
+}
+
+#in {
+  width: 30px;
+  height: 30px;
+}
+
+#out {
+  width: 30px;
+  height: 30px;
+}
+
+#reset {
+  width: 30px;
+  height: 30px;
+}
+
+#erase {
+  width: 30px;
+  height: 30px;
+}
+
+#viewer {
+  float: right;
+  text-align: center;
+}
+
+#file {
+  float: left;
+}
+
+#file td {
+  vertical-align: top;
+}
