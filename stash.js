@@ -64,8 +64,11 @@ Stash.prototype.del_rev = function (name, rev) {
 
 Stash.prototype.load = function () {
   this.files = JSON.parse(localStorage.getItem(this.key));
-  if (typeof this.files !== 'object') {
-  	this.files = {};
+  if (this.files === null || typeof this.files !== 'object') {
+  	this.files = { basic: [ { date: "2012-08-14T00:00:00.000Z",
+                              data: "r = g = b = (noise(x / 100, y / 100, 0) + 1) * 128;" }
+                          ]
+                 };
   } else {
     // process dates
     for (var name in this.files) {

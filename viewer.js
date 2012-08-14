@@ -42,7 +42,7 @@ Viewer.prototype.drawViaCallback = function (fn) {
   ;
   if ($('#simplex').is(':checked')) {
     noise = this.perlin.simplex.bind(this.perlin);
-    turbulence = this.perlin.tsimplex(this.perlin);
+    turbulence = this.perlin.tsimplex.bind(this.perlin);
   }
   var start = new Date().getTime();
   var text = [];
