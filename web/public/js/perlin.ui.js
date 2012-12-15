@@ -3,13 +3,16 @@ $(function () {
   var canvas = $('#myCanvas');
   var code = $('#code');
   var name = $('#name');
+  var user = $('#user');
   var mp = $('#mp');
   var viewer = new Viewer(canvas[0], code[0], perlin, mp);
   var save = new Stash('perlin');
   var file_list = $('#file_list');
+  var share_list = $('#share_list');
   var rev_list = $('#rev_list');
   var current_file;
   var current_rev;
+  var share_data = null;
   save.load();
   load_file_list();
   load_file('basic');
@@ -66,22 +69,34 @@ $(function () {
   });
   $('#del_file').click(delete_file);
   $('#del_rev').click(delete_rev);
+  $('#sync').click(function () {
+    load_share_list();
+  })
   $('#share').click(function () {
-    $.ajax({
-      type: 'POST',
-      url: '/share',
-      data: {
-        name: name.val(),
-        code: code.val()
-      },
-      success: function (data) {
-        console.log(data);
-      }
-    });
+    if (user.val()) {
+      $.ajax({
+        type: 'POST',
+        url: '/perlin',
+        data: {
+          user: user.val(),
+          name: name.val(),
+          revs: save.get_revs(name.val())
+        },
+        success: function (data) {
+          console.log(data);
+        }
+      });
+    } else {
+      console.log("Please enter a user name");
+    }
   });
   file_list.change(function () {
     save_file();
     load_file(file_list.val());
+  });
+  share_list.change(function () {
+    //save_file();
+    load_share(share_list.val());
   });
   rev_list.change(function (evt) {
     var n = file_list.val()
@@ -175,6 +190,48 @@ $(function () {
           .text(key)
       );
     });
+  }
+  function load_share_list () {
+    $.ajax({
+      type: 'GET',
+      url: '/perlin',
+      success: function (data) {
+        share_list.empty();
+        share_data = {};
+        $.each(data, function (index, item) {
+          if (item.name && item.user) {
+            share_list.append(
+              $('<option></option>')
+                .attr("value", item.user + '/' + item.name)
+                .text(item.user + ' / ' + item.name)
+            );
+            share_data[item.user + '/' + item.name] = item.revs;
+          }
+        });
+        console.log(data);
+      }
+    });
+  }
+  function load_share(n) {
+    var share = share_data[n];
+    if (share) {
+      share = share[share.length - 1];
+    }
+    if (share) {
+      current_share = share;
+      current_share_rev = share;
+      name.val(n);
+      code.val(current_share.data);
+      $('#date').html((new Date(current_share.date)).shortdatetime());
+      if (share_list.val() !== n) {
+        share_list.val(n);
+      }
+      //load_rev_list(n);
+      //var rev = save.get_revs(n).length - 1;
+      //if (rev_list.val() !== rev) {
+      //  rev_list.val(rev);
+      //}
+    }
   }
   function load_rev_list(n) {
     rev_list.empty();

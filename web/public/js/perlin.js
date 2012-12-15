@@ -260,20 +260,15 @@ Perlin.prototype.simplex = function (x, y, z) {
   return 32.0 * (n0 + n1 + n2 + n3);
 }
 
-Perlin.prototype.tsimplex = function (x, y, z, octaves, frequency, amplitude) {
-  frequency = (frequency === undefined) ? 2 : frequency;
-  amplitude = (amplitude === undefined) ? 0.5 : amplitude;
-  var freq = 1
-    , amp = 1
-    , max = 0
+Perlin.prototype.tsimplex = function (x, y, z, octaves) {
+  var f = 1
     , n = 0
     , i
   ;
-  for (i = 0; i < octaves; i++, freq *= frequency, amp *= amplitude) {
-    n += this.simplex(x * freq, y * freq, z * freq) * amp;
-    max += amp;
+  for (i = 0; i < octaves; i++, f *= 2) {
+    n += this.simplex(x * f, y * f, z) / f;
   }
-  return n / max;
+  return n;
 }
 
 Perlin.prototype.noise = function(x, y, z) {
@@ -351,20 +346,15 @@ Perlin.prototype.dnoise = function (x, y, z) {
   ];
 }
 
-Perlin.prototype.turbulence = function (x, y, z, octaves, frequency, amplitude) {
-  frequency = (frequency === undefined) ? 2 : frequency;
-  amplitude = (amplitude === undefined) ? 0.5 : frequency;
-  var freq = 1
-    , amp = 1
-    , max = 0
+Perlin.prototype.turbulence = function (x, y, z, octaves) {
+  var f = 1
     , n = 0
     , i
   ;
-  for (i = 0; i < octaves; i++, freq *= frequency, amp *= amplitude) {
-    n += this.noise(x * freq, y * freq, z * freq) * amp;
-    max += amp;
+  for (i = 0; i < octaves; i++, f *= 2) {
+    n += this.noise(x * f, y * f, z) / f;
   }
-  return n / max;
+  return n;
 }
 
 Perlin.prototype.dturbulence = function (x, y, z, octaves) {
@@ -383,13 +373,11 @@ Perlin.prototype.dturbulence = function (x, y, z, octaves) {
 }
 
 // perlin bias modified to work with -1 to 1 instead of 0 to 1
-// push values toward 0 (B=0) or 1(B=1) or keep the same (B=0.5)
 Perlin.bias = function (x, B)  {
   return Math.pow((x + 1) / 2, Math.log(B) / Math.log(0.5)) * 2 - 1;
 }
 
 // perlin gain modified to work with -1 to 1 instead of 0 to 1
-// push values in to 0.5 (G=0) or out to 0 and 1 (G=1) or keep the same (G=0.5)
 Perlin.gain = function (x, G) {
   if (x < 0) {
     return (Perlin.bias(2 * x + 1, 1 - G) - 1) / 2;

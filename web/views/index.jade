@@ -1,0 +1,67 @@
+- var title = "perlin"
+table#file(cellspacing="0",cellpadding="0",border="1")
+  tr
+    td(colspan="2")
+      input#user(type="text")
+      input#save(type="button", value="Save")
+      input#sync(type="button", value="Sync")
+    td
+      input#name(type="text")
+      span#date
+      input#test(type="button", value="Test")
+      input#execute(type="button", value="Draw")
+      input#png(type="button", value="Open as PNG")
+      input#share(type="button", value="Share")
+  tr
+    td
+      select#file_list(size="10")
+    td
+      select#rev_list(size="10")
+    td(rowspan="3")
+      textarea#code(cols="60", rows="21")
+  tr
+    td
+      input#del_file(type="button", value="Delete File")
+    td
+      input#del_rev(type="button", value="Delete Rev")
+  tr
+    td
+      select#share_list(size="10")
+    td
+      select#share_rev_list(size="10")
+table#viewer(cellspacing="0", cellpadding="0",border="1")
+  tr
+    td(colspan="3")
+      label
+        input(type="radio", name="noisetype", value="perlin")
+        span Perlin
+      label
+        input#simplex(type="radio", name="noisetype", value="simplex", checked)
+        span Simplex
+  tr
+    td
+      input#in(type="button", value="in")
+    td
+      input#up(type="button", value="up")
+    td
+      input#out(type="button", value="out")
+  tr
+    td
+      input#left(type="button", value="left")
+    td
+      canvas#myCanvas(width=400, height=400)
+    td
+      input#right(type="button", value="right")
+  tr
+    td
+      input#erase(type="button", value="erase")
+    td
+      input#down(type="button", value="down")
+    td
+      input#reset(type="button", value="reset")
+script(src="js/mersenne-twister.js")
+script(src="js/perlin.js")
+script(src="js/viewer.js")
+script(src="js/stash.js")
+script(src="js/jquery-1.7.2.min.js")
+script(src="js/perlin.ui.js")
